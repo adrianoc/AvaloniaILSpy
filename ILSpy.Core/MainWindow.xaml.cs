@@ -33,6 +33,7 @@ using System.Xml;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
@@ -51,6 +52,7 @@ using ICSharpCode.Decompiler.Metadata;
 using ICSharpCode.Decompiler.TypeSystem;
 using ICSharpCode.Decompiler.TypeSystem.Implementation;
 using ICSharpCode.ILSpy.Controls;
+using ICSharpCode.ILSpy.Options;
 using ICSharpCode.ILSpy.Search;
 using ICSharpCode.ILSpy.TextView;
 using ICSharpCode.ILSpy.TreeNodes;
@@ -141,6 +143,21 @@ namespace ICSharpCode.ILSpy
 			
 			ContextMenuProvider.Add(treeView, decompilerTextView);
 
+			treeView.FontSize = DisplaySettingsPanel.CurrentDisplaySettings.SelectedFontSize;
+			treeView.FontFamily = DisplaySettingsPanel.CurrentDisplaySettings.SelectedFont;
+			DisplaySettingsPanel.CurrentDisplaySettings.PropertyChanged += (sender, args) =>
+			{
+				var displaySettings = (DisplaySettings)sender;
+				if (args.PropertyName == "SelectedFontSize")
+				{
+					treeView.FontSize = displaySettings.SelectedFontSize;
+				}
+				
+				if (args.PropertyName == "SelectedFont")
+				{
+					treeView.FontFamily = displaySettings.SelectedFont;
+				}
+			};
 		}
 		private void InitializeComponent()
 		{
